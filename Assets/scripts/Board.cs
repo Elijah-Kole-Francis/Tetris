@@ -21,6 +21,12 @@ public class Board : MonoBehaviour
     void SpawnPiece()
     {
         activePiece.Initialize(this, Tetronimo.T);
+        activePiece.Initialize(this, Tetronimo.I);
+        activePiece.Initialize(this, Tetronimo.O);
+        activePiece.Initialize(this, Tetronimo.J);
+        activePiece.Initialize(this, Tetronimo.L);
+        activePiece.Initialize(this, Tetronimo.S);
+        activePiece.Initialize(this, Tetronimo.Z);
         Set(activePiece);
     }
 
@@ -50,6 +56,7 @@ public class Board : MonoBehaviour
         int right = boardSize.x / 2;
         int bottom = -boardSize.y / 2;
         int top = boardSize.y / 2;
+
         for (int i = 0; i < piece.cells.Length; i++)
         { 
             Vector3Int cellPosition = (Vector3Int)(piece.cells[i] + position);

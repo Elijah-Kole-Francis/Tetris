@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    Tetronimo: 0
+    Tetronimo: 2
     cells: []
     tile: {fileID: 0}
   board: {fileID: 0}
@@ -304,27 +304,47 @@ MonoBehaviour:
     - {x: 2, y: 1}
     tile: {fileID: 11400000, guid: fa3a85e0a27a1264e912e1663c0daddc, type: 2}
   - Tetronimo: 1
-    cells: []
-    tile: {fileID: 0}
+    cells:
+    - {x: 0, y: 1}
+    - {x: 1, y: 1}
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    tile: {fileID: 11400000, guid: eaf476e7e468fe749bdec880084988c9, type: 2}
   - Tetronimo: 2
     cells:
     - {x: 0, y: 1}
     - {x: -1, y: 0}
     - {x: 0, y: 0}
     - {x: 1, y: 0}
-    tile: {fileID: 0}
+    tile: {fileID: 11400000, guid: b349df699d0c4824d9d6698b8d2a97e3, type: 2}
   - Tetronimo: 3
-    cells: []
-    tile: {fileID: 0}
+    cells:
+    - {x: -1, y: 1}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    tile: {fileID: 11400000, guid: 9c68e7700864ecc4bb259f06387767aa, type: 2}
   - Tetronimo: 4
-    cells: []
-    tile: {fileID: 0}
+    cells:
+    - {x: 1, y: 1}
+    - {x: -1, y: 0}
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    tile: {fileID: 11400000, guid: eaf476e7e468fe749bdec880084988c9, type: 2}
   - Tetronimo: 5
-    cells: []
-    tile: {fileID: 0}
+    cells:
+    - {x: 0, y: 1}
+    - {x: 1, y: 1}
+    - {x: -1, y: 0}
+    - {x: 0, y: 0}
+    tile: {fileID: 11400000, guid: ade402d2c198dbf42b21eb1d3cb2219d, type: 2}
   - Tetronimo: 6
-    cells: []
-    tile: {fileID: 0}
+    cells:
+    - {x: -1, y: 1}
+    - {x: 0, y: 1}
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    tile: {fileID: 11400000, guid: beb29b9c9b20e2a47b8a7e8e82577522, type: 2}
   activePiece: {fileID: 0}
   tilemap: {fileID: 0}
   boardSize: {x: 10, y: 20}
