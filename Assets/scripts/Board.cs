@@ -8,25 +8,45 @@ public class Board : MonoBehaviour
 {
 
     public TetronimoData[] tetronimos;
-    public Piece activePiece;
+    public Piece prefabPiece;
+    Piece activePiece;
+
     public Tilemap tilemap;
     public Vector2Int boardSize;
     public Vector2Int startPosition;
+
+    int left
+    {
+        get { return -boardSize.x / 2; }
+    }
+
+    int right
+    {
+        get { return boardSize.x / 2; }
+    }
+
+    int top
+    {
+        get { return boardSize.y / 2; }
+    }
+
+    int bottom
+    {
+        get { return -boardSize.y / 2; }
+    }
 
     private void Start()
     {
         SpawnPiece();
     }
 
-    void SpawnPiece()
+    public void SpawnPiece()
     {
-        activePiece.Initialize(this, Tetronimo.T);
-        activePiece.Initialize(this, Tetronimo.I);
-        activePiece.Initialize(this, Tetronimo.O);
-        activePiece.Initialize(this, Tetronimo.J);
-        activePiece.Initialize(this, Tetronimo.L);
-        activePiece.Initialize(this, Tetronimo.S);
-        activePiece.Initialize(this, Tetronimo.Z);
+         activePiece = Instantiate(prefabPiece);
+
+        Tetronimo t = (Tetronimo)Random.Range(0, tetronimos.Length);
+
+        activePiece.Initialize(this, t);
         Set(activePiece);
     }
 
@@ -66,8 +86,73 @@ public class Board : MonoBehaviour
                 cellPosition.y < bottom || cellPosition.y >= top) return false;
 
 
-            if (tilemap.HasTile(cellPosition)); return false;
+            if (tilemap.HasTile(cellPosition)) return false;
         }
         return true;
     }
+
+    bool IsLineFull(int y)
+    {
+        for (int x = left; x < right; x++)
+        {
+            Vector3Int cellPosition = new Vector3Int(x, y);
+            if (!tilemap.HasTile(cellPosition)) return false;
+        }
+
+        return true;
+    }
+
+    void DestroyLine(int y)
+    {
+        Debug.Log($"Destroy line: {y}");
+        for (int x = left; x < right; ++x)
+        { 
+        Vector3Int cellPosition= new Vector3Int(x,y);
+            tilemap.SetTile(cellPosition,null);
+        }
+    }
+
+    void ShiftRowsDown(int clearedRow)
+    {
+        for (int y = clearedRow + 1; y <top; y++)
+        {
+            Debug.Log($"Shift down {clearedRow} row");
+            for (int x = left; x < right; ++x)
+            {
+                Vector3Int cellPosition = new Vector3Int(x, y);
+
+                //temp save tile
+                TileBase currentTile = tilemap.GetTile(cellPosition);
+
+                //clear tile
+                tilemap.SetTile(cellPosition, null);
+
+                //move tile down
+                cellPosition.y -= 1;
+                tilemap.SetTile(cellPosition, currentTile);
+            }
+        }
+    }
+
+    public void CheckBoard()
+    {
+        List<int> destroyedLines = new List<int>();
+        //scan bottom to top
+        for (int y = bottom; y < top; ++y)
+        {
+            if (IsLineFull(y))
+            {
+                DestroyLine(y);
+                destroyedLines.Add(y);
+            }    
+        }
+
+        foreach (int y in destroyedLines)
+        {
+            ShiftRowsDown(y);
+        }
+
+
+    }
+
 }

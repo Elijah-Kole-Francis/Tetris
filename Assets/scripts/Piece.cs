@@ -9,6 +9,8 @@ public class Piece : MonoBehaviour
     public Vector2Int[] cells;
 
     public Vector2Int position;
+    
+    bool freeze = false;
 
     public void Initialize(Board board, Tetronimo tetronimo)
     {
@@ -34,33 +36,95 @@ public class Piece : MonoBehaviour
     }
     private void Update()
     {
+        if (freeze) return;
+
         board.Clear(this);
 
-        if (Input.GetKeyDown(KeyCode.A))
+        
+        
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            Move(Vector2Int.left);
+            HardDrop();
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else
         {
-            Move(Vector2Int.down);
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                Move(Vector2Int.left);
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                Move(Vector2Int.down);
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                Move(Vector2Int.right);
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow)) Rotate(1);
+            else if (Input.GetKeyDown(KeyCode.RightArrow)) Rotate(-1);
+
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        
+        board.Set(this);
+
+        //TBD
+        if (Input.GetKey(KeyCode.P))
         {
-            Move(Vector2Int.right);
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            Move(Vector2Int.up);
+            board.CheckBoard();
         }
 
-        board.Set(this);
+
+        //checking board must come after board.set
+        if (freeze)
+        {
+            board.CheckBoard();
+
+            //update score
+            board.SpawnPiece();
+
+        }
     }
-    private void Move(Vector2Int translation)
+
+    void Rotate(int direction)
+    {
+        Quaternion rotation = Quaternion.Euler(0, 0, 90 * direction);
+
+
+        for (int i = 0; i < cells.Length; i++)
+        {
+            //convert cellPosition to Vec3 to work with Quatern
+            Vector3 cellPosition = new Vector3(cells[i].x, cells[i].y);
+
+            //Get the restul
+            Vector3 result = rotation * cellPosition;
+
+            //put it back in the cells data
+            cells[i].x = Mathf.RoundToInt(result.x);
+            cells[i].y = Mathf.RoundToInt(result.y);
+        }
+
+
+    }
+
+    void HardDrop()
+    {
+        //algo: repeatedly move down until unable
+        while (Move(Vector2Int.down))
+        {
+            //do nothing
+        }
+
+        freeze = true;
+        board.SpawnPiece();
+    }
+    bool Move(Vector2Int translation)
     {
         Vector2Int newPosition = position;
         newPosition += translation;
 
+        bool positionValid = board.IsPositionValid(this, newPosition);
+        if (positionValid) position = newPosition;
 
-        if (board.IsPositionValid(this,newPosition))position += translation;
+        return positionValid;
     }
 }
