@@ -115,7 +115,7 @@ public class Piece : MonoBehaviour
         }
 
         freeze = true;
-        board.SpawnPiece();
+        //board.SpawnPiece();
     }
     bool Move(Vector2Int translation)
     {

@@ -7,13 +7,15 @@ using UnityEngine.Tilemaps;
 public class Board : MonoBehaviour
 {
 
-    public TetronimoData[] tetronimos;
+    public TetrisManager tetrisManager;
     public Piece prefabPiece;
-    Piece activePiece;
-
     public Tilemap tilemap;
+
+    public TetronimoData[] tetronimos;    
     public Vector2Int boardSize;
     public Vector2Int startPosition;
+
+    Piece activePiece;
 
     int left
     {
@@ -147,11 +149,19 @@ public class Board : MonoBehaviour
             }    
         }
 
+        Debug.Log(destroyedLines);
+
+        int rowShiftedDown = 0;
         foreach (int y in destroyedLines)
         {
-            ShiftRowsDown(y);
+            ShiftRowsDown(y - rowShiftedDown);
+            rowShiftedDown++;
         }
 
+
+        //update the score
+        int score = tetrisManager.CalculateScore(destroyedLines.Count);
+        tetrisManager.ChangeScore(score);
 
     }
 
